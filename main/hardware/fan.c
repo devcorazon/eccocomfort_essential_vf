@@ -16,6 +16,14 @@
 
 static int fan_speed = 0;
 
+static void fan_task(void *pvParameters)
+{
+    while (1)
+    {
+        vTaskDelay(pdMS_TO_TICKS(100));  // Sleep for 100 ms
+    }
+}
+
 int fan_init()
 {
     BaseType_t task_created = xTaskCreate(fan_task, "FAN task ", FAN_TASK_STACK_SIZE, NULL, FAN_TASK_PRIORITY, NULL);
@@ -52,12 +60,4 @@ int fan_set(uint8_t direction, uint8_t speed)
     printf("Fan set: direction=%u, speed=%d.\n", direction, fan_speed);
 
     return 0;
-}
-
-void fan_task(void *pvParameters)
-{
-    while (1)
-    {
-        vTaskDelay(pdMS_TO_TICKS(100));  // Sleep for 100 ms
-    }
 }

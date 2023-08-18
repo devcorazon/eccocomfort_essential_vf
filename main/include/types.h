@@ -66,8 +66,6 @@ enum {
     MODE_EMISSION         						= 0x02,
     MODE_FIXED_CYCLE      						= 0x03,
     MODE_AUTOMATIC_CYCLE  						= 0x04,
-	MODE_AUTOMATIC_CYCLE_EXTRA_CYCLE			= BIT(6),
-	MODE_AUTOMATIC_CYCLE_CALCULATE_DURATION		= BIT(7),
 };
 
 // Speed
@@ -78,8 +76,6 @@ enum {
     SPEED_MEDIUM								= 0x03,
     SPEED_HIGH									= 0x04,
     SPEED_BOOST									= 0x05,
-	SPEED_AUTOMATIC_CYCLE_FORCE_BOOST			= BIT(6),
-	SPEED_AUTOMATIC_CYCLE_FORCE_NIGHT			= BIT(7),
 };
 
 // Direction of rotation state

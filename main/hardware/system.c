@@ -24,6 +24,7 @@
 #include "sensor.h"
 #include "rgb_led.h"
 #include "fan.h"
+#include "ir_receiver.h"
 
 ///
 static struct i2c_dev_s i2c_dev;
@@ -116,6 +117,7 @@ int system_init(void) {
 	sensor_init(&i2c_dev, &adc_dev);
 	rgb_led_init(&i2c_dev);
 	fan_init();
+	ir_receiver_init();
 
 #if 0
 	set_mode_set(4);

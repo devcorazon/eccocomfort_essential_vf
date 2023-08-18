@@ -186,9 +186,9 @@ int sensor_init(struct i2c_dev_s *i2c_dev, struct adc_dev_s *adc_dev) {
 
 	temperature_sensor_init();
 
-	xTaskCreate(sensor_task, "sensor_task", SENSOR_TASK_STACK_SIZE, NULL, SENSOR_TASK_PRIORITY, NULL);
+	BaseType_t task_created = xTaskCreate(sensor_task, "sensor_task", SENSOR_TASK_STACK_SIZE, NULL, SENSOR_TASK_PRIORITY, NULL);
 
-	return 0;
+	return task_created == pdPASS ? 0 : -1;
 }
 
 int temperature_sensor_init(void) {

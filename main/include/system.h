@@ -15,6 +15,16 @@
 #include "esp_adc/adc_oneshot.h"
 #include "esp_adc/adc_cali.h"
 
+
+#define DEBUG_MODE 1  // Set to 1 for debug mode, 0 to disable
+
+#if DEBUG_MODE
+    #define PRINTF_ORIGINAL printf
+#else
+    #define PRINTF_ORIGINAL(...) (void)0
+#endif
+#define printf PRINTF_ORIGINAL
+
 #define FW_VERSION_MAJOR 				0
 #define FW_VERSION_MINOR 				0
 #define FW_VERSION_PATCH 				1

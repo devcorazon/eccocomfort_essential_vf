@@ -65,7 +65,5 @@ enum
 
 int fan_init();
 int fan_set(uint8_t direction,uint8_t speed);
-void fan_task(void *pvParameters);
-
 
 #endif /* MAIN_INCLUDE_FAN_H_ */

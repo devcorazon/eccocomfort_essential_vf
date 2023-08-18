@@ -5,13 +5,48 @@
  *      Author: youcef.benakmoume
  */
 
-#include "rgb_led.h"
 
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
+#include "rgb_led.h"
 #include "ktd2027.h"
 
+static void led_task(void *pvParameters)
+{
+    while (1)
+    {
+        vTaskDelay(pdMS_TO_TICKS(100));  // Sleep for 100 ms
+    }
+}
+
+static void rgb_led_blink_task(void *pvParameters)
+{
+	struct blink_params *params = (struct blink_params *)pvParameters;
+
+    uint8_t led_mode = 1;  // Assuming led_mode 1 represents blinking
+    uint32_t blink_cycles = params->blink_duration / params->blink_period;  // Calculate the number of blink cycles
+
+    for (uint32_t i = 0; i < blink_cycles; i++)
+    {
+        // Turn on the LED
+        if (ktd2027_led_set(params->led_color, led_mode) != 0) {
+            printf("Error setting LED on.\n");
+        }
+        vTaskDelay(params->blink_period / portTICK_PERIOD_MS);
+
+        // Turn off the LED
+        if (ktd2027_led_set(params->led_color, 0) != 0) {
+            printf("Error setting LED off.\n");
+        }
+        vTaskDelay(params->blink_period / portTICK_PERIOD_MS);
+    }
+
+    // Free the memory allocated for parameters
+    free(params);
+
+    vTaskDelete(NULL);
+}
 
 int rgb_led_init(struct i2c_dev_s *i2c_dev)
 {
@@ -44,41 +79,5 @@ int rgb_led_blink(uint8_t led_color, uint32_t blink_duration, uint32_t blink_per
     BaseType_t task_created = xTaskCreate(rgb_led_blink_task, "Blink task", 2048, params, 5, NULL);
 
     return task_created == pdPASS ? 0 : -1;
-}
-
-void rgb_led_blink_task(void *pvParameters)
-{
-	struct blink_params *params = (struct blink_params *)pvParameters;
-
-    uint8_t led_mode = 1;  // Assuming led_mode 1 represents blinking
-    uint32_t blink_cycles = params->blink_duration / params->blink_period;  // Calculate the number of blink cycles
-
-    for (uint32_t i = 0; i < blink_cycles; i++)
-    {
-        // Turn on the LED
-        if (ktd2027_led_set(params->led_color, led_mode) != 0) {
-            printf("Error setting LED on.\n");
-        }
-        vTaskDelay(params->blink_period / portTICK_PERIOD_MS);
-
-        // Turn off the LED
-        if (ktd2027_led_set(params->led_color, 0) != 0) {
-            printf("Error setting LED off.\n");
-        }
-        vTaskDelay(params->blink_period / portTICK_PERIOD_MS);
-    }
-
-    // Free the memory allocated for parameters
-    free(params);
-
-    vTaskDelete(NULL);
-}
-
-void led_task(void *pvParameters)
-{
-    while (1)
-    {
-        vTaskDelay(pdMS_TO_TICKS(100));  // Sleep for 100 ms
-    }
 }
 

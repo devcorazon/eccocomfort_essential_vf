@@ -29,10 +29,22 @@ static esp_console_repl_t *repl = NULL;
 ///
 static int cmd_set_mode_speed_func(int argc, char** argv) {
 
-	uint8_t mode_set = (uint8_t)strtol(argv[1], NULL, 10);
-	uint8_t speed_set = (uint8_t)strtol(argv[2], NULL, 10);
+    if(argc < 3)
+    {
+        printf("Invalid arguments. Usage: set_ms <index 1> <index 2>\n");
+        return -1;
+    }
 
-//#TODO check values
+	char *endptr;
+
+	uint8_t mode_set = (uint8_t)strtol(argv[1], &endptr, 10);
+	uint8_t speed_set = (uint8_t)strtol(argv[2], &endptr, 10);
+
+    // Check for conversion errors
+//    if (endptr == argv[1] || *endptr != '\0' || mode_set < 0 || mode_set > 5 || speed_set < 0 || speed_set > 4) {
+//        printf("Invalid index. Supported values mode_set = {0,1,2,3,4,5}  speed_set = {0,1,2,3,4} \n");
+//        return -1;
+//    }
 
 	set_mode_set(mode_set);
 	set_speed_set(speed_set);
